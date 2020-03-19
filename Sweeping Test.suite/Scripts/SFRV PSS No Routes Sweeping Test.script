@@ -1,0 +1,447 @@
+﻿connect "SandSFRVBO"
+Click (Image:"TMDS ICON", WaitFor:60)
+Click "TrainManagement"
+
+put the hour into myHour 
+Log myhour
+Put the minute into myMin
+log mymin
+Put the second into mySecs
+log mysecs
+log myhour, mymin, mysecs
+log the international date && myhour & mymin &mysecs
+put "C:/Users/Administrator/Documents/SFRTA PSS Sweeping Test" && the international date && myhour & mymin & mysecs & ".csv" into Myfile
+open file myfile
+
+Put file resourcePath("SFRTA Window Names.csv") into WinNames
+Put line 1 of WinNames && return into file myfile
+repeat with each line of line 2 to -1 of WinNames
+	click "Window"
+	Log It
+	Click (text: It, IgnoreSpaces:"Yes", Waitfor:15)
+	Put it into item 1 of row
+	
+	
+	repeat with each item of EveryImageLocation("SignalRight") 
+		wait 5
+		put mysignInfo = ""
+		log it
+		click it
+		if imagefound("Yellow") then
+			put readtext("Yellow") into mysigInfo
+			log mysiginfo
+			typetext EscapeKey	
+		Else
+			//put "Could not find Signal Name in time" into item 6 of row
+			TypeText EscapeKey
+		end if
+		
+		rightclick it-(15,15)
+		
+		if imagefound(ImageName:"PositionTrain") then
+			Click "POSITIONTRAIN"
+			set myPSSTrack = it - (0,15)
+		Else
+			typetext EscapeKey
+			rightclick it -(15,0)+(0,15)
+			if imagefound(ImageName:"PositionTrain")
+				Click "PositionTrain"
+				set myPSSTrack = it + (0,15)
+			End if
+		End If
+		
+		
+		if imagefound(ImageName:"EnterTrainSymbol") Then
+			Click "EnterTrainSymbol"
+			Else
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			Next Repeat
+		End if
+		
+		Click "SelectTrainSymbol"
+		TypeText TabKey
+		Click (Image:"PositionTrainSave", WaitFor:45)   
+		Click "TrainInUseYES"	
+		if imagefound(ImageName:"SFRVTrainSymbol") Then
+			rightclick foundimageLocation()
+		Else
+			TypeText EscapeKey
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			Next repeat
+		end if
+		
+		if imagefound(ImageName:"PASSREDSIGNAL") Then
+			Click "PASSREDSIGNAL"
+		Else
+			TypeText EscapeKey
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			Next repeat
+		end if
+		
+		click myPssTrack
+		if imagefound (ImageName: "SwitchConfirmation") then
+			click (Image:"SwitchConfirmation")
+			if imagefound(ImageName:"AUTHORITYTOPASSREDSIGNAL") Then
+				put ReadText("AuthText_A", "AuthText_B") into mytext
+				put trimall(mytext,",") into item 2 of row
+			end if
+			Typetext tabkey,downarrow, uparrow, returnkey, returnkey, returnkey, returnkey, returnKey, ReturnKey
+		Else
+			TypeText EscapeKey
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			Next Repeat
+		end if
+		
+		wait 2
+		Click (Image:"TMDS ICON", WaitFor:60)
+		click "SYSTEMSUMMARY_1"
+		wait 2
+		click "AuthoritiesTab"
+		
+		if imagefound(ImageName:"AuthNum")then
+			
+			put imageLocation("AuthNum") into coord
+			put coord + (0,30) into AuthNum
+			click AuthNum
+			put readtext(AuthNum) into myNum
+			log myNum
+		End if
+		
+		//Put myNum into item 3 of row
+		
+		
+		Click (Image:"TMDS ICON", WaitFor:60)
+		Click "TrainManagement"
+		
+		connect "SandSFRTATMC"
+		if imagefound (ImageName: "AUTHORITYReview", Waitfor:30) then
+			Click (Image:"AUTHORITYReview", WaitFor:180)
+			Click (Image:"AuthorityAcknowledge", WaitFor:34)
+			
+			Click (Image:"AuthorityReturn", WaitFor:28)
+			put myNum into item 3 of row
+			Put "Need Kibana acknowledge here" into item 4 of row
+			put "Future Kibana URL" into item 5 of row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			wait 10
+			connect "SandSFRVBO"
+			if imagefound(ImageName: "SFRVTrainSymbol") then 
+				RightClick (Image:"SFRVTrainSymbol", WaitFor:78)
+				Click (Image:"CANCELPASSREDSIGNAL")
+				Click (Image:"CancelPSSYes")
+			Else
+				Click (Image:"TMDS ICON", WaitFor:60)
+				click "SYSTEMSUMMARY_1"
+				wait 2
+				click "AuthoritiesTab"
+				put imageLocation("AuthNum") into coord
+				put coord + (0,30) into AuthNum
+				Click Authnum
+				RightClick AuthNum
+				Click "CANCELPASSREDSIGNAL_1"
+				Click (Image:"CancelPSSYes")
+			End if
+			
+			
+			
+			
+			Connect "SandSFRTATMC"
+			Click (Image:"AUTHORITYReview", WaitFor:180)
+			Click (Image:"AuthorityVoidAcknowledge", WaitFor:28)
+			connect "SandSFRVBO"
+			Click (Image:"TMDS ICON", WaitFor:60)
+			Click "TrainManagement"	
+			
+			
+		Else
+			if imageFound(ImageName: "SYNCHRONIZATIONERROR") then
+				Click (Image:"SYNCHRONIZATIONERROR", waitfor:60)
+				Click (image:"DegradedSystemAck", waitfor:60)
+				Click (image: "Menu1", waitfor:60)
+				click(image:"Cutout", waitfor:60)
+				click(image: "CUTOUTENFORCEMENTYes", waitfor:60)
+				Wait 10
+				connect "SandSFRVBO"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"	
+				if imagefound(ImageName: "SFRVTrainSymbol") then 
+					RightClick (Image:"SFRVTrainSymbol", WaitFor:78)
+					Click (Image:"CANCELPASSREDSIGNAL")
+					Click (Image:"CancelPSSYes")
+				Else
+					Click (Image:"TMDS ICON", WaitFor:60)
+					click "SYSTEMSUMMARY_1"
+					wait 2
+					click "AuthoritiesTab"
+					put imageLocation("AuthNum") into coord
+					put coord + (0,30) into AuthNum
+					Click Authnum
+					RightClick AuthNum
+					Click "CANCELPASSREDSIGNAL_1"
+					Click (Image:"CancelPSSYes")
+					Put "Authority created but onboard went out of sync" into item 3 of row
+					put "Not Acknowledged" into Item 4 of row
+					put "No Kibana Information" into Item 5 of Row
+					put mysiginfo into item 6 of Row
+					put CRLF & row after file myfile
+					
+					
+				End if
+			End If
+			
+			
+			
+			Connect "SandSFRTATMC"
+			click(image: "menu1", waitfor:300)
+			click(image:"CutIn", waitfor:300)
+			click (Image: "ACTIVATEENFORCEMENTYes", waitfor:300)
+			click (image: "AcceptConsist", waitfor:300)
+			click (image: "SELECTCURRENTTRACK", waitfor:300)
+			
+			click (image: "SelectTrack Yes",waitfor:300)
+			click (image: "South", waitfor:300)
+			click (image: "MainButton", waitfor:300)
+			wait 45
+			connect "SandSFRVBO"
+			Click (Image:"TMDS ICON", WaitFor:60)
+			Click "TrainManagement"
+			wait 2
+			Click "YellowBannerTMDS"
+			RightClick (Image:"ALERTTYPE", WaitFor:47)
+			Click "ACKNOWLEDGEALL"
+			Click "ACKNOWLEDGEALLALERTS"
+			Click (Image:"TMDS ICON", WaitFor:60)
+			Click "TrainManagement"
+			
+		end if
+	end Repeat
+	
+	repeat with each item of EveryImageLocation("SignalLeft") 
+		Wait 5
+		
+		log it
+		click it
+		if imagefound("Yellow") then
+			put readtext("Yellow") into mysigInfo
+			log mysiginfo
+			
+			typetext EscapeKey	
+		Else
+			//put "Could not find Signal Name in time" into item 6 of row
+			TypeText EscapeKey
+		end if
+		
+		rightclick it+(15,15)
+		
+		if imagefound(ImageName:"PositionTrain") then
+			Click "POSITIONTRAIN"
+			set myPSSTrack = it + (0,15)
+		Else
+			typetext EscapeKey
+			rightclick it +(15,0)-(0,15)
+			if imagefound(ImageName:"PositionTrain")
+				Click "PositionTrain"
+				set myPSSTrack = it - (0,15)
+			End if
+		End If
+		
+		
+		if imagefound(ImageName:"EnterTrainSymbol") Then
+			Click "EnterTrainSymbol"
+			Else
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			Next Repeat
+		End if
+		
+		Click "SelectTrainSymbol"
+		TypeText TabKey
+		Click (Image:"PositionTrainSave", WaitFor:45)   
+		Click "TrainInUseYES"	
+		if imagefound(ImageName:"SFRVTrainSymbol") THen
+			rightclick foundimageLocation()
+		Else
+			TypeText EscapeKEy
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			Next repeat
+		end if
+		
+		if imagefound(ImageName:"PASSREDSIGNAL") Then
+			Click "PASSREDSIGNAL"
+		Else
+			TypeText EscapeKey
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			Next repeat
+		end if
+		
+		click myPssTrack
+		if imagefound (ImageName: "SwitchConfirmation") then
+			click (Image:"SwitchConfirmation")
+			if imagefound(ImageName:"AUTHORITYTOPASSREDSIGNAL") Then
+				put ReadText("AuthText_A", "AuthText_B") into mytext
+				put trimall(mytext,",") into item 2 of row
+			end if
+			Typetext tabkey,downarrow, uparrow, returnkey, returnkey, returnkey, returnkey, returnKey, ReturnKey
+		Else
+			TypeText EscapeKey
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			Next Repeat
+		end if
+		
+		
+		Click (Image:"TMDS ICON", WaitFor:60)
+		click "SYSTEMSUMMARY_1"
+		wait 2
+		click "AuthoritiesTab"
+		
+		if imagefound(ImageName:"AuthNum")then
+			
+			put imageLocation("AuthNum") into coord
+			put coord + (0,30) into AuthNum
+			click AuthNum
+			put readtext(AuthNum) into myNum
+			log myNum
+		End if
+		
+		//Put myNum into item 3 of row
+		
+		
+		Click (Image:"TMDS ICON", WaitFor:60)
+		Click "TrainManagement"
+		
+		connect "SandSFRTATMC"
+		if imagefound (ImageName: "AUTHORITYReview", Waitfor:30) then
+			Click (Image:"AUTHORITYReview", WaitFor:180)
+			Click (Image:"AuthorityAcknowledge", WaitFor:34)
+			
+			Click (Image:"AuthorityReturn", WaitFor:28)
+			put myNum into item 3 of row
+			Put "Need Kibana acknowledge here" into item 4 of row
+			put "Future Kibana URL" into item 5 of row
+			put mysiginfo into item 6 of Row
+			put CRLF & row after file myfile
+			wait 10
+			connect "SandSFRVBO"
+			if imagefound(ImageName: "SFRVTrainSymbol") then 
+				RightClick (Image:"SFRVTrainSymbol", WaitFor:78)
+				Click (Image:"CANCELPASSREDSIGNAL")
+				Click (Image:"CancelPSSYes")
+			Else
+				Click (Image:"TMDS ICON", WaitFor:60)
+				click "SYSTEMSUMMARY_1"
+				click "AuthoritiesTab"
+				wait 2
+				put imageLocation("AuthNum") into coord
+				put coord + (0,30) into AuthNum
+				Click Authnum
+				RightClick AuthNum
+				Click "CANCELPASSREDSIGNAL_1"
+				Click (Image:"CancelPSSYes")
+			End if
+			
+			
+			
+			
+			Connect "SandSFRTATMC"
+			Click (Image:"AUTHORITYReview", WaitFor:180)
+			Click (Image:"AuthorityVoidAcknowledge", WaitFor:28)
+			connect "SandSFRVBO"
+			Click (Image:"TMDS ICON", WaitFor:60)
+			Click "TrainManagement"	
+			
+			
+			Else
+			if imageFound(ImageName: "SYNCHRONIZATIONERROR") then
+				Click (Image:"SYNCHRONIZATIONERROR", waitfor:60)
+				Click (image:"DegradedSystemAck", waitfor:60)
+				Click (image: "Menu1", waitfor:60)
+				click(image:"Cutout", waitfor:60)
+				click(image: "CUTOUTENFORCEMENTYes", waitfor:60)
+				Wait 10
+				connect "SandSFRVBO"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"	
+				if imagefound(ImageName: "SFRVTrainSymbol") then 
+					RightClick (Image:"SFRVTrainSymbol", WaitFor:78)
+					Click (Image:"CANCELPASSREDSIGNAL")
+					Click (Image:"CancelPSSYes")
+				Else
+					Click (Image:"TMDS ICON", WaitFor:60)
+					click "SYSTEMSUMMARY_1"
+					wait 2
+					click "AuthoritiesTab"
+					put imageLocation("AuthNum") into coord
+					put coord + (0,30) into AuthNum
+					Click Authnum
+					RightClick AuthNum
+					Click "CANCELPASSREDSIGNAL_1"
+					Click (Image:"CancelPSSYes")
+					Put "Authority created but onboard went out of sync" into item 3 of row
+					put "Not Acknowledged" into Item 4 of row
+					put "No Kibana Information" into Item 5 of Row
+					put mysiginfo into item 6 of Row
+					put CRLF & row after file myfile
+					
+					
+				End if
+			End If
+			
+			
+			
+			Connect "SandSFRTATMC"
+			click(image: "menu1", waitfor:300)
+			click(image:"CutIn", waitfor:300)
+			click (Image: "ACTIVATEENFORCEMENTYes", waitfor:300)
+			click (image: "AcceptConsist", waitfor:300)
+			click (image: "SELECTCURRENTTRACK", waitfor:300)
+			
+			click (image: "SelectTrack Yes",waitfor:300)
+			click (image: "South", waitfor:300)
+			click (image: "MainButton", waitfor:300)
+			wait 45
+			connect "SandSFRVBO"
+			Click (Image:"TMDS ICON", WaitFor:60)
+			Click "TrainManagement"
+			wait 2
+			Click "YellowBannerTMDS"
+			RightClick (Image:"ALERTTYPE", WaitFor:47)
+			Click "ACKNOWLEDGEALL"
+			Click "ACKNOWLEDGEALLALERTS"
+			Click (Image:"TMDS ICON", WaitFor:60)
+			Click "TrainManagement"
+		
+	end if
+end Repeat
+end repeat 

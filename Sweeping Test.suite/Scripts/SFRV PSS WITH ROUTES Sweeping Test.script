@@ -1,0 +1,662 @@
+﻿connect "SandSFRVBO"
+Click (Image:"TMDS ICON", WaitFor:60)
+Click "TrainManagement"
+
+put the hour into myHour 
+Log myhour
+Put the minute into myMin
+log mymin
+Put the second into mySecs
+log mysecs
+log myhour, mymin, mysecs
+log the international date && myhour & mymin &mysecs
+put "C:/Users/Administrator/Documents/SFRTA PSS Routes Sweeping Test" && the international date && myhour & mymin & mysecs & ".csv" into Myfile
+open file myfile
+
+Put file resourcePath("MICTESTSignalwithSwitchesReport.csv") into Routes
+Put line 1 of file resourcePath("PssHeader.csv") && return into file myfile
+
+put item 1 of line 2 of routes into myOldSysUID
+put " " into myOldSwitch
+put () into switches
+put item 7 of line 2 of routes into myOldSigLat
+put item 8 of line 2 of routes into myOldSigLong
+put item 6 of line 2 of routes into myOldSigDirection
+put item 13 of line 2 of routes into myOldScreen
+put item 5 of line 2 of routes into myOldSignal
+put item 16 of line 2 of routes into myOldEntryMP
+Put item 17 of line 2 of routes into myOldEntryCP
+put item 15 of line 2 of routes into myOldExitSignal
+put item 18 of line 2 of routes into myOldExitMP
+put item 19 of line 2 of routes into MyoldExitCP
+log myOldSigLat
+log myOldSigLong
+repeat with each line of line 2 to -1 of Routes
+	wait 3
+	log switches
+	put item 1 of it into myCurSysUID
+	put item 2 of it into myCurEntrySignalID
+	put item 3 of it into myCurSwitchID
+	put item 4 of it into myCurSwitchPos
+	put item 5 of it into myCurSignal
+	put item 6 of it into myCurSigDirection
+	put item 7 of it into myCurSignalLat
+	put item 8 of it into myCurSignalLong
+	put item 9 of it into myCurSwitch
+	put item 10 of it into myCurSwitchLat
+	put item 11 of it into myCurSwitchLong
+	put item 12 of it into myCurCPSignal
+	put item 13 of it into myCurScreen
+	put item 15 of it into myCurExitSignal
+	put item 16 of it into myCurEntryMP
+	put item 17 of it into myCurEntryCP
+	put item 18 of it into myCurExitMP
+	put item 19 of it into myCurExitCP
+	
+	
+	
+	
+	if MycurSysUId = MyOldSysUID
+		if mycurSwitch = MyOldSwitch
+			put myCurSignalLat into myOldSigLat
+			put myCurSignalLong into myOldSigLong
+			put myCurSigDirection into myOldSigDirection
+			put item 1 of it into myOldSysUID
+			Put item 9 of it into MyOldSwitch
+			put item 5 of it into myOldSignal
+			put item 16 of it into myOldEntryMP
+			Put item 17 of it into myOldEntryCP
+			put item 15 of it into myOldExitSignal
+			put item 18 of it into myOldExitMP
+			put item 19 of it into MyoldExitCP
+			Next Repeat	
+		End If
+	End IF
+	
+	
+	
+	If myCurSysUID does not equal myOldSysUID
+		log switches
+		put (myoldSigLat,myoldSigLong) into SigCoord
+		
+		if myOldSigDirection = "R"
+			put sigCoord+(30,95) into convertedSigCoord
+			log sigcoord
+			log convertedSigCoord
+			
+			rightclick convertedSigCoord-(16,15)
+			
+			if imagefound(ImageName:"PositionTrain") then
+				Click "POSITIONTRAIN"
+				set myPSSTrack = convertedSigCoord - (0,15)
+			Else
+				typetext EscapeKey
+				rightclick convertedSigCoord -(16,0)+(0,15)
+				if imagefound(ImageName:"PositionTrain")
+					Click "PositionTrain"
+					set myPSSTrack = convertedSigCoord + (0,15)
+				Else 
+					typetext EscapeKey
+					Log "something isn't right"
+					Put myOldSysUID into item 1 of row
+					put myoldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+					Put "Unable to Create PSS here" into item 3 of Row
+					put "Not Acknowledged" into Item 4 of row
+					put "No Kibana Information" into Item 5 of Row
+					put CRLF & row after file myfile
+					put myCurSignalLat into myOldSigLat
+					put myCurSignalLong into myOldSigLong
+					put myCurSigDirection into myOldSigDirection
+					put item 1 of it into myOldSysUID
+					Put item 9 of it into MyOldSwitch
+					put item 5 of it into myOldSignal
+					put item 16 of it into myOldEntryMP
+					Put item 17 of it into myOldEntryCP
+					put item 15 of it into myOldExitSignal
+					put item 18 of it into myOldExitMP
+					put item 19 of it into MyoldExitCP
+					Next Repeat
+				End if
+			End If
+		End If
+		
+		
+		if myOldSigDirection = "L"
+			Put sigCoord + (5,90) into convertedSigCoord
+			log sigcoord
+			log convertedSigCoord
+			
+			rightclick convertedSigCoord +(16,10)
+			if imagefound(ImageName:"positionTrain")
+				Click "PositionTrain"
+				set myPSSTrack =  convertedSigCoord + (0,10)
+			Else
+				TypeText EscapeKey
+				RightClick convertedSigCoord + (16,0)-(0,10)
+				If ImageFound(ImageName: "PositionTrain")
+					Click "PositionTrain"
+					Set myPSSTrack = convertedSigCoord - (0,10)
+				Else
+					Log "something isn't right"
+					Typetext EscapeKey
+					Put myOldSysUID into item 1 of row
+					put myoldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+					Put "Unable to Create PSS here" into item 3 of Row
+					put "Not Acknowledged" into Item 4 of row
+					put "No Kibana Information" into Item 5 of Row
+					put CRLF & row after file myfile
+					put myCurSignalLat into myOldSigLat
+					put myCurSignalLong into myOldSigLong
+					put myCurSigDirection into myOldSigDirection
+					put item 1 of it into myOldSysUID
+					Put item 9 of it into MyOldSwitch
+					put item 5 of it into myOldSignal
+					put item 16 of it into myOldEntryMP
+					Put item 17 of it into myOldEntryCP
+					put item 15 of it into myOldExitSignal
+					put item 18 of it into myOldExitMP
+					put item 19 of it into MyoldExitCP
+					Next Repeat
+				end if
+			End if
+		End if
+		
+		if imagefound(ImageName:"EnterTrainSymbol") Then
+			Click "EnterTrainSymbol"
+		Else
+			Put myOldSysUID into item 1 of row
+			put myoldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put CRLF & row after file myfile
+			typetext EscapeKey
+			put myCurSignalLat into myOldSigLat
+			put myCurSignalLong into myOldSigLong
+			put myCurSigDirection into myOldSigDirection
+			put item 1 of it into myOldSysUID
+			Put item 9 of it into MyOldSwitch
+			put item 5 of it into myOldSignal
+			put item 16 of it into myOldEntryMP
+			Put item 17 of it into myOldEntryCP
+			put item 15 of it into myOldExitSignal
+			put item 18 of it into myOldExitMP
+			put item 19 of it into MyoldExitCP
+			Next Repeat
+		End if
+		
+		Click "SelectTrainSymbol"
+		TypeText TabKey
+		Click (Image:"PositionTrainSave", WaitFor:45)   
+		Click "TrainInUseYES"	
+		if imagefound(ImageName:"SFRVTrainSymbol") Then
+			rightclick foundimageLocation()
+		Else
+			
+			TypeText EscapeKey
+			Put myOldSysUID into item 1 of row
+			put myOldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put CRLF & row after file myfile
+			put myCurSignalLat into myOldSigLat
+			put myCurSignalLong into myOldSigLong
+			put myCurSigDirection into myOldSigDirection
+			put item 1 of it into myOldSysUID
+			Put item 9 of it into MyOldSwitch
+			put item 5 of it into myOldSignal
+			put item 16 of it into myOldEntryMP
+			Put item 17 of it into myOldEntryCP
+			put item 15 of it into myOldExitSignal
+			put item 18 of it into myOldExitMP
+			put item 19 of it into MyoldExitCPP
+			Next repeat
+		end if
+		
+		if imagefound(ImageName:"PASSREDSIGNAL") Then
+			Click "PASSREDSIGNAL"
+		Else
+			TypeText EscapeKey
+			Put myOldSysUID into item 1 of row
+			put myOldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put CRLF & row after file myfile
+			put myCurSignalLat into myOldSigLat
+			put myCurSignalLong into myOldSigLong
+			put myCurSigDirection into myOldSigDirection
+			put item 1 of it into myOldSysUID
+			Put item 9 of it into MyOldSwitch
+			put item 5 of it into myOldSignal
+			put item 16 of it into myOldEntryMP
+			Put item 17 of it into myOldEntryCP
+			put item 15 of it into myOldExitSignal
+			put item 18 of it into myOldExitMP
+			put item 19 of it into MyoldExitCP
+			Next repeat
+		end if
+		
+		click myPssTrack
+		
+		if imagefound (ImageName: "SwitchConfirmation") then
+			click (Image:"SwitchConfirmation")
+			//if imagefound(ImageName:"AUTHORITYTOPASSREDSIGNAL") Then
+			//put ReadText("AuthText_A", "AuthText_B") into mytext
+			//put trimall(mytext,",") into item 2 of row
+			//end if
+			Typetext tabkey,downarrow, uparrow, returnkey, returnkey, returnkey, returnkey, returnKey, ReturnKey
+		Else
+			
+			TypeText EscapeKey
+			Put myOldSysUID into item 1 of row
+			put myOldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+			Put "Unable to Create PSS here" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put CRLF & row after file myfile
+			put myCurSignalLat into myOldSigLat
+			put myCurSignalLong into myOldSigLong
+			put myCurSigDirection into myOldSigDirection
+			put item 1 of it into myOldSysUID
+			Put item 9 of it into MyOldSwitch
+			put item 5 of it into myOldSignal
+			put item 16 of it into myOldEntryMP
+			Put item 17 of it into myOldEntryCP
+			put item 15 of it into myOldExitSignal
+			put item 18 of it into myOldExitMP
+			put item 19 of it into MyoldExitCP
+			
+			Next Repeat
+		end if
+		
+		if imagefound(ImageName:"TRAINGTBVALIDATION")
+			click "TRAINGTBVALIDATION"
+			Put myOldSysUID into item 1 of row
+			put myOldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+			Put "Train Does Not Have Valid GTB, Authority Issuance is Denied" into item 3 of Row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put CRLF & row after file myfile
+			repeat while switches does not equal ()
+				wait 3
+				log switches
+				pop switches into long
+				log long
+				pop switches into Lat
+				log lat
+				Click (lat, long)
+				RightClick "BlackBackground"
+				wait 5
+				
+				log switches
+				
+			end repeat
+			put myCurSignalLat into myOldSigLat
+			put myCurSignalLong into myOldSigLong
+			put myCurSigDirection into myOldSigDirection
+			put item 1 of it into myOldSysUID
+			Put item 9 of it into MyOldSwitch
+			put item 5 of it into myOldSignal
+			put item 16 of it into myOldEntryMP
+			Put item 17 of it into myOldEntryCP
+			put item 15 of it into myOldExitSignal
+			put item 18 of it into myOldExitMP
+			put item 19 of it into MyoldExitCP
+			Next Repeat
+		end if
+		
+		wait 3
+		Click (Image:"TMDS ICON", WaitFor:60)
+		click "SYSTEMSUMMARY_1"
+		wait 5
+		click "AuthoritiesTab"
+		
+		if imagefound(ImageName:"AuthNum")then
+			
+			put imageLocation("AuthNum") into coord
+			put coord + (0,30) into AuthNum
+			click AuthNum
+			put readtext(AuthNum) into myNum
+			log myNum
+		Else
+			Log "screenLag"
+		End if
+		
+		//Put myNum into item 3 of row
+		
+		
+		Click (Image:"TMDS ICON", WaitFor:60)
+		Click "TrainManagement"
+		
+		
+		
+		
+		connect "SandSFRTATMC"
+		if imagefound (ImageName: "AUTHORITYReview", Waitfor:30) then
+			Click (Image:"AUTHORITYReview", WaitFor:180)
+			Click (Image:"AuthorityAcknowledge", WaitFor:34)
+			
+			Click (Image:"AuthorityReturn", WaitFor:28)
+			Put myOldSysUID into item 1 of row
+			put myOldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+			put myNum into item 3 of row
+			Put "Need Kibana acknowledge here" into item 4 of row
+			put "Future Kibana URL" into item 5 of row
+			put CRLF & row after file myfile
+			wait 10
+			connect "SandSFRVBO"
+			if imagefound(ImageName: "SFRVTrainSymbol") then 
+				RightClick (Image:"SFRVTrainSymbol", WaitFor:78)
+				Click (Image:"CANCELPASSREDSIGNAL")
+				Click (Image:"CancelPSSYes")
+				wait 5
+			Else
+				Click (Image:"TMDS ICON", WaitFor:60)
+				click "SYSTEMSUMMARY_1"
+				wait 2
+				click "AuthoritiesTab"
+				put imageLocation("AuthNum") into coord
+				put coord + (0,30) into AuthNum
+				Click Authnum
+				RightClick AuthNum
+				Click "CANCELPASSREDSIGNAL_1"
+				Click (Image:"CancelPSSYes")
+				wait 5
+			End if
+			
+			
+			
+			
+			Connect "SandSFRTATMC"
+			Click (Image:"AUTHORITYReview", WaitFor:180)
+			Click (Image:"AuthorityVoidAcknowledge", WaitFor:28)
+			connect "SandSFRVBO"
+			Click (Image:"TMDS ICON", WaitFor:60)
+			Click "TrainManagement"	
+			wait 5
+			
+			
+		Else
+			if imageFound(ImageName: "SYNCHRONIZATIONERROR") then
+				Click (Image:"SYNCHRONIZATIONERROR", waitfor:60)
+				Click (image:"DegradedSystemAck", waitfor:60)
+				Click (image: "Menu1", waitfor:60)
+				click(image:"Cutout", waitfor:60)
+				click(image: "CUTOUTENFORCEMENTYes", waitfor:60)
+				Wait 10
+				connect "SandSFRVBO"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"	
+				if imagefound(ImageName: "SFRVTrainSymbol") then 
+					RightClick (Image:"SFRVTrainSymbol", WaitFor:78)
+					Click (Image:"CANCELPASSREDSIGNAL")
+					Click (Image:"CancelPSSYes")
+				Else
+					Click (Image:"TMDS ICON", WaitFor:60)
+					click "SYSTEMSUMMARY_1"
+					wait 2
+					click "AuthoritiesTab"
+					put imageLocation("AuthNum") into coord
+					put coord + (0,30) into AuthNum
+					Click Authnum
+					RightClick AuthNum
+					Click "CANCELPASSREDSIGNAL_1"
+					Click (Image:"CancelPSSYes")
+				End if
+				wait 5
+				Put myOldSysUID into item 1 of row
+				put myOldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+				Put "Authority created but onboard went out of sync" into item 3 of row
+				put "Not Acknowledged" into Item 4 of row
+				put "No Kibana Information" into Item 5 of Row
+				put CRLF & row after file myfile
+			End If
+			
+			
+			
+			
+			Connect "SandSFRTATMC"
+			click(image: "menu1", waitfor:300)
+			click(image:"CutIn", waitfor:300)
+			click (Image: "ACTIVATEENFORCEMENTYes", waitfor:300)
+			click (image: "AcceptConsist", waitfor:300)
+			click (image: "SELECTCURRENTTRACK", waitfor:300)
+			
+			click (image: "SelectTrack Yes",waitfor:300)
+			click (image: "South", waitfor:300)
+			click (image: "MainButton", waitfor:300)
+			if imagefound(Image:"ACTIVE_1", WaitFor:120)
+				connect "SandSFRVBO"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"
+				connect "SandSFRVBO"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"
+				wait 2
+				Click "YellowBannerTMDS"
+				RightClick (Image:"ALERTTYPE", WaitFor:47)
+				Click "ACKNOWLEDGEALL"
+				Click "ACKNOWLEDGEALLALERTS"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"
+			Else
+				wait 45
+				connect "SandSFRVBO"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"
+				wait 2
+				Click "YellowBannerTMDS"
+				RightClick (Image:"ALERTTYPE", WaitFor:47)
+				Click "ACKNOWLEDGEALL"
+				Click "ACKNOWLEDGEALLALERTS"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"
+			end if
+			
+			
+		end if
+		
+		repeat while switches does not equal ()
+			wait 3
+			log switches
+			pop switches into long
+			log long
+			pop switches into Lat
+			log lat
+			Click (lat, long)
+			RightClick "BlackBackground"
+			wait 5
+			
+			log switches
+			
+		end repeat
+	Else
+		Click (Image:"TMDS ICON", WaitFor:60)
+		Click "TrainManagement"
+		if  imagefound(imagename:"IssuanceFailed", waitfor:5)
+			connect "SandSFRTATMC"
+			
+			Click (image: "Menu1", waitfor:60)
+			click(image:"Cutout", waitfor:60)
+			click(image: "CUTOUTENFORCEMENTYes", waitfor:60)
+			Wait 10
+			connect "SandSFRVBO"
+			Click (Image:"TMDS ICON", WaitFor:60)
+			Click "TrainManagement"	
+			wait 5
+			Click (Image:"TMDS ICON", WaitFor:60)
+			click "TrainManagement"
+			if imagefound(ImageName: "SFRVTrainSymbol") then 
+				RightClick (Image:"SFRVTrainSymbol", WaitFor:78)
+				Click (Image:"CANCELPASSREDSIGNAL")
+				Click (Image:"CancelPSSYes")
+			Else
+				Click (Image:"TMDS ICON", WaitFor:60)
+				click "SYSTEMSUMMARY_1"
+				wait 2
+				click "AuthoritiesTab"
+				put imageLocation("AuthNum") into coord
+				put coord + (0,30) into AuthNum
+				Click Authnum
+				RightClick AuthNum
+				Click "CANCELPASSREDSIGNAL_1"
+				Click (Image:"CancelPSSYes")
+			End if
+			wait 5
+			Put myOldSysUID into item 1 of row
+			put myOldSignal && "@" && myOldEntryMP && myoldEntryCP && "to" && myoldExitSignal &&"@"&& myOldExitMP  && myOldExitCP into item 2 of Row
+			Put "Long Delay or Authority Issuance Failed to be received Onboard" into item 3 of row
+			put "Not Acknowledged" into Item 4 of row
+			put "No Kibana Information" into Item 5 of Row
+			put CRLF & row after file myfile
+			
+			Connect "SandSFRTATMC"
+			click(image: "menu1", waitfor:300)
+			click(image:"CutIn", waitfor:300)
+			click (Image: "ACTIVATEENFORCEMENTYes", waitfor:300)
+			click (image: "AcceptConsist", waitfor:300)
+			click (image: "SELECTCURRENTTRACK", waitfor:300)
+			
+			click (image: "SelectTrack Yes",waitfor:300)
+			click (image: "South", waitfor:300)
+			click (image: "MainButton", waitfor:300)
+			if imagefound(Image:"ACTIVE_1", WaitFor:120)
+				connect "SandSFRVBO"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"
+				wait 2
+				Click "YellowBannerTMDS"
+				RightClick (Image:"ALERTTYPE", WaitFor:47)
+				Click "ACKNOWLEDGEALL"
+				Click "ACKNOWLEDGEALLALERTS"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"
+			Else
+				wait 45
+				connect "SandSFRVBO"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"
+				wait 2
+				Click "YellowBannerTMDS"
+				RightClick (Image:"ALERTTYPE", WaitFor:47)
+				Click "ACKNOWLEDGEALL"
+				Click "ACKNOWLEDGEALLALERTS"
+				Click (Image:"TMDS ICON", WaitFor:60)
+				Click "TrainManagement"
+			end if
+			repeat while switches does not equal ()
+				wait 3
+				log switches
+				pop switches into long
+				log long
+				pop switches into Lat
+				log lat
+				Click (lat, long)
+				RightClick "BlackBackground"
+				wait 5
+				
+				log switches
+				
+			end repeat
+			put myCurSignalLat into myOldSigLat
+			put myCurSignalLong into myOldSigLong
+			put myCurSigDirection into myOldSigDirection
+			put item 1 of it into myOldSysUID
+			Put item 9 of it into MyOldSwitch
+			put item 5 of it into myOldSignal
+			put item 16 of it into myOldEntryMP
+			Put item 17 of it into myOldEntryCP
+			put item 15 of it into myOldExitSignal
+			put item 18 of it into myOldExitMP
+			put item 19 of it into MyoldExitCP
+			Next Repeat	
+		End If
+	End If
+	
+	
+	
+	put myCurSignalLat into myOldSigLat
+	put myCurSignalLong into myOldSigLong
+	put myCurSigDirection into myOldSigDirection
+	put item 1 of it into myOldSysUID
+	Put item 9 of it into MyOldSwitch
+	put item 5 of it into myOldSignal
+	put item 16 of it into myOldEntryMP
+	Put item 17 of it into myOldEntryCP
+	put item 15 of it into myOldExitSignal
+	put item 18 of it into myOldExitMP
+	put item 19 of it into MyoldExitCP
+	log myoldswitch
+	Log myCurSwitch
+	if myCurScreen does not equal myOldScreen
+		Click (Image:"Control", WaitFor:21)
+		Click (Image:"RELEASETERRITORY", WaitFor:25)
+		wait 5
+		Click "CloseReleasePage"
+		Click (Image:"Control", WaitFor:21)
+		Click "SYSTEMLOGON"
+		Click "TMDSUser"
+		Typetext tabKey
+		TypeText "1","1","1"
+		Click "Ok_1"
+		click (Text: myCurScreen)
+		TypeText InsertKey, altKey, InsertKey, InsertKey, InsertKey, InsertKey, InsertKey,InsertKey, InsertKey, InsertKey
+		Click "LOAD"
+		wait 30
+		Click (Image: "TMDS ICON", waitfor:120)
+		Click "TrainManagement"
+	end if
+	
+	put myCurScreen into myOldScreen
+	Put(myCurSwitchLat, myCurSwitchLong) into SwitchCoord
+	if item 4 of it = ";TRUE"
+		put SwitchCoord+(20,90) into ConvertedSwitchCoord
+		Click convertedswitchcoord
+		if imagefound(Image:"NotASwitch")
+			Typetext EscapeKey
+			put SwitchCoord+(15,90) into ConvertedSwitchCoord
+			Click convertedSwitchCoord
+			if imagefound(Image:"NotASwitch")
+				Log "Something is wrong"
+				Typetext escapeKey
+				put myCurSignalLat into myOldSigLat
+				put myCurSignalLong into myOldSigLong
+				put myCurSigDirection into myOldSigDirection
+				put item 1 of it into myOldSysUID
+				Put item 9 of it into MyOldSwitch
+				put item 5 of it into myOldSignal
+				put item 16 of it into myOldEntryMP
+				Put item 17 of it into myOldEntryCP
+				put item 15 of it into myOldExitSignal
+				put item 18 of it into myOldExitMP
+				put item 19 of it into MyoldExitCP
+				Next Repeat
+			End if
+			Rightclick (Image:"BlackBackground")
+			Wait 5
+			push ConvertedSwitchCoord into Switches
+			put myCurSignalLat into myOldSigLat
+			put myCurSignalLong into myOldSigLong
+			put myCurSigDirection into myOldSigDirection
+			put item 1 of it into myOldSysUID
+			Put item 9 of it into MyOldSwitch
+			put item 5 of it into myOldSignal
+			put item 16 of it into myOldEntryMP
+			Put item 17 of it into myOldEntryCP
+			put item 15 of it into myOldExitSignal
+			put item 18 of it into myOldExitMP
+			put item 19 of it into MyoldExitCP
+			Next Repeat
+		End if
+		Rightclick (Image:"BlackBackground")
+		Wait 5
+		push ConvertedSwitchCoord into Switches
+		
+	end if
+	
+	
+	
+	
+End Repeat

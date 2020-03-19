@@ -1,0 +1,10 @@
+{
+    adaptiveConstant = <*I7>;
+    commandList = "[{captureRect:[15, 542, 576, 639], elementName:\"Bulletin Review\", eventNum:2, folderPath:\"\", hotSpot:[355, 458], imageName:\"Bulletin Review\", itemEvent:\"TurboListItemEvent_Drag\", itemMode:\"TurboListItemMode_Existing\", itemType:\"TurboListItemType_Image\", screenShotFile:\"Screen0002.png\", searchType:\"Tolerant of Background\", skipStep:0, userModified:1, usingTempImageName:0, waitForTime:12}, {captureRect:[472.089552, 536.018868, 629.089552, 589.018868], elementName:\"image0001\", eventNum:2, folderPath:\"\", hotSpot:[622.089552, 476.981132], imageName:\"image0001\", itemEvent:\"TurboListItemEvent_Drop\", itemMode:\"TurboListItemMode_Existing\", itemType:\"TurboListItemType_Image\", screenShotFile:\"Screen0002.png\", searchType:\"Precise to Pixel\", skipStep:1, userModified:0, usingTempImageName:1, waitForTime:12}, {captureRect:[132, 557, 380, 643], elementName:\"Review\", eventNum:4, folderPath:\"\", hotSpot:[353, 456], imageName:\"Review\", itemEvent:\"TurboListItemEvent_Click\", itemMode:\"TurboListItemMode_Existing\", itemType:\"TurboListItemType_Image\", screenShotFile:\"Screen0004.png\", searchType:\"Smoothed for Text\", skipStep:1, userModified:1, usingTempImageName:1, waitForTime:3}, {captureRect:[88, 545, 513, 634], elementName:\"Bulletin Acknowledge\", eventNum:6, folderPath:\"\", hotSpot:[353, 456], imageName:\"Bulletin Acknowledge\", itemEvent:\"TurboListItemEvent_Click\", itemMode:\"TurboListItemMode_Existing\", itemType:\"TurboListItemType_Image\", screenShotFile:\"Screen0006.png\", searchType:\"Smoothed for Text\", skipStep:0, userModified:1, usingTempImageName:0, waitForTime:4}]";
+    dilations = <*I3>;
+    maxSize = <*I300>;
+    minSize = <*I16>;
+    savedWithEpfVersion = <*I1910011330>;
+    sessionType = turboSession;
+    sessionUsesDOMObjects = <*BN>;
+}

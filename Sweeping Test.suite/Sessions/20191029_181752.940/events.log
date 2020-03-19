@@ -1,0 +1,72 @@
+1	0.0159999	start	
+2	3.906	mouseDown	{button:2, clickCount:1, hotSpot:[250, 140], waitFor:4}
+3	4.078	mouseUp	{button:2, clickCount:1, hotSpot:[250, 140]}
+4	6.11	mouseDown	{button:1, clickCount:1, hotSpot:[312, 211]}
+5	6.281	mouseUp	{button:1, clickCount:1, hotSpot:[312, 211]}
+6	8.594	mouseDown	{button:1, clickCount:1, hotSpot:[835, 763]}
+7	9.188	mouseUp	{button:1, clickCount:1, hotSpot:[835, 763]}
+8	10.641	mouseDown	{button:1, clickCount:1, hotSpot:[835, 763]}
+9	10.844	mouseUp	{button:1, clickCount:1, hotSpot:[835, 763]}
+10	15.141	mouseDown	{button:1, clickCount:1, hotSpot:[786, 986]}
+11	15.516	mouseUp	{button:1, clickCount:1, hotSpot:[786, 986]}
+12	20.203	mouseDown	{button:2, clickCount:1, hotSpot:[938, 141]}
+13	20.406	mouseUp	{button:2, clickCount:1, hotSpot:[938, 141]}
+14	23.75	mouseDown	{button:1, clickCount:1, hotSpot:[1012, 238]}
+15	23.938	mouseUp	{button:1, clickCount:1, hotSpot:[1012, 238]}
+16	25.469	mouseDown	{button:1, clickCount:1, hotSpot:[1365, 246]}
+17	25.641	mouseUp	{button:1, clickCount:1, hotSpot:[1365, 246]}
+18	27.547	mouseDown	{button:1, clickCount:1, hotSpot:[1613, 243]}
+19	27.735	mouseUp	{button:1, clickCount:1, hotSpot:[1613, 243]}
+20	31.36	mouseDown	{button:1, clickCount:1, hotSpot:[658, 317]}
+21	31.547	mouseUp	{button:1, clickCount:1, hotSpot:[658, 317]}
+22	33.938	mouseDown	{button:1, clickCount:1, hotSpot:[663, 901]}
+23	34.094	mouseUp	{button:1, clickCount:1, hotSpot:[663, 901]}
+24	35.25	mouseDown	{button:1, clickCount:1, hotSpot:[606, 329]}
+25	35.438	mouseUp	{button:1, clickCount:1, hotSpot:[606, 329]}
+26	36.422	keyDown	{modifiers:8388608, string:"", theKey:""}
+27	36.61	keyUp	{modifiers:8388608, string:"", theKey:""}
+28	36.922	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+29	37.031	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+30	37.063	keyDown	{modifiers:8388608, string:"", theKey:""}
+31	37.203	keyUp	{modifiers:8388608, string:"", theKey:""}
+32	37.235	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+33	37.297	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+34	37.328	keyDown	{modifiers:8388608, string:"", theKey:""}
+35	37.422	keyUp	{modifiers:8388608, string:"", theKey:""}
+36	37.438	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+37	37.516	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+38	37.531	keyDown	{modifiers:8388608, string:"", theKey:""}
+39	37.641	keyUp	{modifiers:8388608, string:"", theKey:""}
+40	37.641	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+41	37.719	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+42	37.75	keyDown	{modifiers:8388608, string:"", theKey:""}
+43	37.828	keyUp	{modifiers:8388608, string:"", theKey:""}
+44	37.844	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+45	37.922	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+46	37.953	keyDown	{modifiers:8388608, string:"", theKey:""}
+47	38.031	keyUp	{modifiers:8388608, string:"", theKey:""}
+48	38.047	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+49	38.125	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+50	38.156	keyDown	{modifiers:8388608, string:"", theKey:""}
+51	38.235	keyUp	{modifiers:8388608, string:"", theKey:""}
+52	38.25	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+53	38.344	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+54	38.36	keyDown	{modifiers:8388608, string:"", theKey:""}
+55	38.453	keyUp	{modifiers:8388608, string:"", theKey:""}
+56	38.469	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+57	38.563	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+58	38.594	keyDown	{modifiers:8388608, string:"", theKey:""}
+59	38.672	keyUp	{modifiers:8388608, string:"", theKey:""}
+60	38.703	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+61	38.797	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+62	38.813	keyDown	{modifiers:8388608, string:"", theKey:""}
+63	38.906	keyUp	{modifiers:8388608, string:"", theKey:""}
+64	38.922	keyDown	{modifiers:0, string:@"\r", theKey:@"\r"}
+65	39	keyUp	{modifiers:0, string:@"\r", theKey:@"\r"}
+66	40.031	mouseDown	{button:1, clickCount:1, hotSpot:[651, 902]}
+67	40.203	mouseUp	{button:1, clickCount:1, hotSpot:[651, 902]}
+68	41.11	mouseDown	{button:1, clickCount:1, hotSpot:[593, 565]}
+69	41.313	mouseUp	{button:1, clickCount:1, hotSpot:[593, 565]}
+70	42.031	mouseDown	{button:1, clickCount:1, hotSpot:[639, 911]}
+71	42.219	mouseUp	{button:1, clickCount:1, hotSpot:[639, 911]}
+72	48.407	end	

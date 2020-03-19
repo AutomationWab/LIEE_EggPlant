@@ -1,0 +1,10 @@
+{
+    adaptiveConstant = <*I7>;
+    commandList = "[{captureRect:[677.738007, 20.460993, 747.738007, 50.460993], elementName:\"image0005\", eventNum:2, folderPath:\"\", hotSpot:[712.738007, 1164.539007], imageName:\"image0005\", itemEvent:\"TurboListItemEvent_Click\", itemMode:\"TurboListItemMode_Existing\", itemType:\"TurboListItemType_Image\", screenShotFile:\"Screen0002.png\", searchType:\"Tolerant of Background\", skipStep:1, userModified:0, usingTempImageName:1, waitForTime:14}, {captureRect:[459, 122, 693, 140], elementName:\"Train Management System\", eventNum:4, folderPath:\"\", hotSpot:[567, 1066], imageName:\"Train Management System\", itemEvent:\"TurboListItemEvent_Click\", itemMode:\"TurboListItemMode_Existing\", itemType:\"TurboListItemType_Image\", OCRText:\"H Train Management and Dispatch System (TMDS) - (PTC ENABLED) - 3.5.687.376.BRC.14\", screenShotFile:\"Screen0004.png\", searchType:\"Smoothed for Text\", skipStep:0, userModified:1, usingTempImageName:0, waitForTime:-1}]";
+    dilations = <*I3>;
+    maxSize = <*I300>;
+    minSize = <*I16>;
+    savedWithEpfVersion = <*I1910011330>;
+    sessionType = turboSession;
+    sessionUsesDOMObjects = <*BN>;
+}

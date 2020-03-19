@@ -1,0 +1,166 @@
+﻿connect "SandSFRVBO"
+Click (Image:"TMDS ICON", WaitFor:60)
+Click "TrainManagement"
+
+if imagefound(ImageName: "EMTImage") then
+	Typetext controlKey,"w"
+end if
+Typetext controlkey, "w"
+set mycount = 0
+Put file resourcePath("SFRTA Window Names.csv") into WinNames
+repeat with each line of line 2 to -1 of WinNames
+	click "Window"
+	Log It
+	Click (text: It, IgnoreSpaces:"Yes", Waitfor:15)
+	repeat with each item of EveryImageLocation("EMTImage")
+		log mycount
+		click (Image:"SFRVTrainSymbol") 
+		set clickedImage to FoundImageInfo()'s hotspot
+		log clickedimage
+		Log it
+		rightclick it+(5,0)+(0,15)
+		
+		if imagefound(ImageName:"PositionTrain") then
+			Click "POSITIONTRAIN"
+		Else
+			typetext EscapeKey
+			rightclick it +(3,0)+(0,15)
+			if imagefound(ImageName:"PositionTrain")
+				Click "PositionTrain"
+			else
+				TypeTExt EscapeKey
+				rightclick it+(3,0)-(0,15)
+				if imagefound(ImageName:"PositionTrain")
+					Click "PositionTrain"
+				else
+					Typetext EscapeKey
+					rightclick it+(15,0)-(0,15)
+					
+					if imagefound(ImageName:"PositionTrain")
+						click "PositionTrain"
+					Else
+						typetext EscapeKey
+						Rightclick it+(15,15)
+						if Imagefound(ImageName: "PositionTrain")
+							click "positionTrain"
+						else
+							typetext EscapeKey
+							rightclick it +(27,15)
+							click "positionTrain"
+						end if
+						
+					end if
+					
+				end if
+			End if
+		End If
+		
+		
+		
+		
+		Click "EnterTrainSymbol"
+		Click "SelectTrainSymbol"
+		TypeText TabKey
+		Click (Image:"PositionTrainSave", WaitFor:45)
+		Click "TrainInUseYES"	
+		rightclick (Image:"SFRVTrainSymbol")
+		set mynewlocation to foundimageinfo
+		set NewclickedImage to FoundImageInfo()'s hotspot
+		log NewclickedImage
+		if clickedimage = newclickedimage then
+			set mycount = mycount+1
+		Else
+			set mycount = 0
+		end if
+		log mycount
+		Click (Image:"EnterMainTrack", WaitFor:41)
+		Typetext Leftarrow, RightArrow
+		if mycount > 0 then
+			repeat mycount -1 times
+				Typetext downarrow
+			end repeat
+		end if
+		set mylocation = mynewlocation
+		Typetext ReturnKey
+		TypeText LeftArrow,RightArrow,ReturnKey
+		Click (Image:"EMTForSFRV9999")
+		TypeText DownArrow, ReturnKey
+		Click (Image:"YES_1")
+		
+		connect "SandSFRTATMC"
+		if imagefound (ImageName: "AUTHORITYReview", Waitfor:30) then
+			Click (Image:"AUTHORITYReview", WaitFor:180)
+			Click (Image:"AuthorityAcknowledge", WaitFor:34)
+			Click (Image:"AuthorityReturn", WaitFor:28)
+			wait 20
+			connect "SandSFRVBO"
+			if imagefound(ImageName: "SFRVTrainSymbol") then 
+				RightClick (Image:"SFRVTrainSymbol", WaitFor:78)
+			Else
+				rightclick it-(5,0)+(0,10)
+			end if
+			Click (Image:"CancelEMT", WaitFor:24)
+			Click (Image:"EMTCancelYes", WaitFor:33)
+			if imagefound(ImageName:"EMTActive") Then
+				wait 15
+				Click (Image: "TMDS ICON")
+				click (image: "SYSTEMSUMMARY_1")
+				Click (image: "AuthoritiesTab")
+				click (image:"EMTOption")
+				rightclick (image:"EMTOption")
+				click (image:"CANCELENTERMAINTRACK")
+				click (image:"CANCELENTERMAINTRACKAUTHORITY")
+			end if
+			Connect "SandSFRTATMC"
+			Click (Image:"AUTHORITYReview", WaitFor:180)
+			Click (Image:"AuthorityVoidAcknowledge", WaitFor:28)
+			Connect "SandSFRVBO"		
+			
+		Else if imageFound(ImageName: "SYNCHRONIZATIONERROR") then
+			Click (Image:"SYNCHRONIZATIONERROR", waitfor:60)
+			Click (image:"DegradedSystemAck", waitfor:60)
+			Click (image: "Menu1", waitfor:60)
+			click(image:"Cutout", waitfor:60)
+			click(image: "CUTOUTENFORCEMENTYes", waitfor:60)
+			Wait 20
+			connect "SandSFRVBO"
+			if imagefound(ImageName: "SFRVTrainSymbol") then 
+				RightClick (Image:"SFRVTrainSymbol", WaitFor:78)
+			Else
+				rightclick it-(5,0)+(0,10)
+			end if
+			Click (Image:"CancelEMT", WaitFor:24)
+			Click (Image:"EMTCancelYes", WaitFor:33)
+			wait 5
+			if imagefound(ImageName:"EMTActive") Then
+				wait 15
+				Click (Image: "TMDS ICON", waitfor:60)
+				click (image: "SYSTEMSUMMARY_1", waitfor:60)
+				Click (image: "AuthoritiesTab", waitfor:60)
+				click (image:"EMTOption", waitfor:60)
+				rightclick (image:"EMTOption", waitfor:60)
+				click (image:"CANCELENTERMAINTRACK", waitfor:60)
+				click (image:"CANCELENTERMAINTRACKAUTHORITY", waitfor:60)
+			end if
+			Connect "SandSFRTATMC"
+			click(image: "menu1", waitfor:300)
+			click(image:"CutIn", waitfor:300)
+			click (Image: "ACTIVATEENFORCEMENTYes", waitfor:300)
+			click (image: "AcceptConsist", waitfor:300)
+			click (image: "SELECTCURRENTTRACK", waitfor:300)
+			click (image: "SelectTrack Yes", waitfor:300)
+			click (image: "South", waitfor:300)
+			click (image: "MainButton", waitfor:300)
+			if imagefound (ImageName:"Active_1", waitfor:120)
+				Connect "SandSFRVBO"
+			Else 
+				Wait 45
+				connect "SandSFRVBO"
+			end if	
+		end if
+	End Repeat
+end repeat 
+
+
+
+

@@ -1,0 +1,10 @@
+{
+    adaptiveConstant = <*I7>;
+    commandList = "[{captureRect:[0, 0, 0, 0], elementName:\"UNKNOWN\", eventNum:3, folderPath:\"\", imageName:\"\", itemEvent:\"TurboListItemEvent_TypeText\", itemMode:\"TurboListItemMode_New\", itemType:\"TurboListItemType_TypeText\", screenShotFile:\"Screen0003.png\", skipStep:0, text:@\"\\\"R\\\",Backspace,\\\"rpride\\\"\", userModified:0, usingTempImageName:1, waitForTime:-1}, {captureRect:[430.355292, 552.106509, 526.355292, 571.106509], elementName:\"APassword\", eventNum:20, folderPath:\"\", hotSpot:[480.355292, 641.893491], imageName:\"APassword\", itemEvent:\"TurboListItemEvent_Click\", itemMode:\"TurboListItemMode_New\", itemType:\"TurboListItemType_Image\", OCRText:\"A Password\", screenShotFile:\"Screen0020.png\", searchType:\"Smoothed for Text\", skipStep:0, userModified:0, usingTempImageName:1, waitForTime:-1}, {captureRect:[0, 0, 0, 0], elementName:\"UNKNOWN\", eventNum:22, folderPath:\"\", imageName:\"\", itemEvent:\"TurboListItemEvent_TypeText\", itemMode:\"TurboListItemMode_New\", itemType:\"TurboListItemType_TypeText\", screenShotFile:\"Screen0022.png\", skipStep:0, text:@\"\\\"wabtec123\\\"\", userModified:0, usingTempImageName:1, waitForTime:-1}, {captureRect:[527.30792, 500.242604, 564.30792, 517.242604], elementName:\"LOGI\", eventNum:40, folderPath:\"\", hotSpot:[544.30792, 688.757396], imageName:\"LOGI\", itemEvent:\"TurboListItemEvent_Click\", itemMode:\"TurboListItemMode_New\", itemType:\"TurboListItemType_Image\", OCRText:\"LOGI\", screenShotFile:\"Screen0040.png\", searchType:\"Smoothed for Text\", skipStep:0, userModified:0, usingTempImageName:1, waitForTime:-1}]";
+    dilations = <*I3>;
+    maxSize = <*I300>;
+    minSize = <*I16>;
+    savedWithEpfVersion = <*I1910011330>;
+    sessionType = turboSession;
+    sessionUsesDOMObjects = <*BN>;
+}
